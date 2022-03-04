@@ -79,3 +79,5 @@ while game_on:
     player2_name = input()
     print("Hello {}".format(player2_name))
     player2 = Player(player2_name,new_deck.half_2)
+
+    print('Player 1 turn:')
