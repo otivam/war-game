@@ -70,14 +70,12 @@ new_deck.shuffle()
 new_deck.cut()
 
 print("Player 1 name: ")
-#player1_name = input()
-player1_name = 'P1'
+player1_name = input()
 print("Hello {} !".format(player1_name))
 player1 = Player(player1_name,Hand(new_deck.half_1))
 
 print("Player 2 name: ")
-#player2_name = input()
-player2_name = 'P2'
+player2_name = input()
 print("Hello {} !".format(player2_name))
 player2 = Player(player2_name,Hand(new_deck.half_2))
 
