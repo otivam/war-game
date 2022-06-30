@@ -11,6 +11,7 @@ class Deck:
     deck = []
     half_1 = []
     half_2 = []
+    halfs = []
 
     for x in SUITE:
         for y in RANKS:
@@ -23,7 +24,7 @@ class Deck:
         middle_index = len(self.deck)//2
         self.half_1 = self.deck[:middle_index]
         self.half_2 = self.deck[middle_index:]
-
+        self.halfs = [self.half_1,self.half_2]
 
 class Hand:
     def __init__(self,cards):
@@ -69,18 +70,32 @@ new_deck = Deck(SUITE,RANKS)
 new_deck.shuffle()
 new_deck.cut()
 
-print("Player 1 name: ")
-player1_name = input()
-print("Hello {} !".format(player1_name))
-player1 = Player(player1_name,Hand(new_deck.half_1))
+my_data = {}
+def generate_players(num_of_players):
+    for x in range(num_of_players):
+        print("Player {} name: ".format(x+1))
+        my_data['player{}_name'.format(x+1)] = input() 
+        print("Hello {} !".format(my_data['player{}_name'.format(x+1)]))
+        my_data['player{}'.format(x+1)] = Player(my_data['player{}_name'.format(x+1)],Hand(new_deck.halfs[x]))
 
-print("Player 2 name: ")
-player2_name = input()
-print("Hello {} !".format(player2_name))
-player2 = Player(player2_name,Hand(new_deck.half_2))
+
+generate_players(2)
+
+player1 = my_data['player1']
+player2 = my_data['player2']
+
 
 count_rounds = 0
 count_wars = 0
+
+def small_battle_check_condition():
+    if RANKS.index(p1_played_card[1:]) < RANKS.index(p2_played_card[1:]):
+        print('{} win, adding {} cards to hand.'.format(player2.name,len(cards_on_table)))
+        player2.hand.add(cards_on_table)
+    else:
+        print('{} win, adding {} cards to hand.'.format(player1.name,len(cards_on_table)))
+        player1.hand.add(cards_on_table)
+
 
 
 while len(player1.hand.cards) > 0 and len(player2.hand.cards) > 0:
@@ -99,7 +114,6 @@ while len(player1.hand.cards) > 0 and len(player2.hand.cards) > 0:
     cards_on_table.append(p2_played_card)
 
 
-
     if p1_played_card[1:] == p2_played_card[1:]:
         print('WAR!')
         print("Each player removes 3 cards 'face down' and then one card face up")
@@ -115,20 +129,10 @@ while len(player1.hand.cards) > 0 and len(player2.hand.cards) > 0:
             cards_on_table.append(p1_played_card)
             cards_on_table.append(p2_played_card)
 
-            if RANKS.index(p1_played_card[1:]) < RANKS.index(p2_played_card[1:]):
-                print('{} win, adding {} cards to hand.'.format(player2.name,len(cards_on_table)))
-                player2.hand.add(cards_on_table)
-            else:
-                print('{} win, adding {} cards to hand.'.format(player1.name,len(cards_on_table)))
-                player1.hand.add(cards_on_table)
+            small_battle_check_condition()
 
     else:
-        if RANKS.index(p1_played_card[1:]) < RANKS.index(p2_played_card[1:]):
-            print('{} win, adding {} cards to hand.'.format(player2.name,len(cards_on_table)))
-            player2.hand.add(cards_on_table)
-        else:
-            print('{} win, adding {} cards to hand.'.format(player1.name,len(cards_on_table)))
-            player1.hand.add(cards_on_table)
+        small_battle_check_condition()
 
 if len(player1.hand.cards) == 0:
     print('{} win!'.format(player2.name))
